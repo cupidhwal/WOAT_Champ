@@ -77,9 +77,9 @@ namespace WOAT
             if (joint == null)
             {
                 rbGear = this.AddComponent<Rigidbody>();
-                rbGear.mass = 10f;
-                rbGear.linearDamping = 1;
-                rbGear.angularDamping = 1;
+                rbGear.mass = 2f;
+                rbGear.linearDamping = 0;
+                rbGear.angularDamping = 0;
                 rbGear.constraints = RigidbodyConstraints.FreezeRotation;
             }
         }

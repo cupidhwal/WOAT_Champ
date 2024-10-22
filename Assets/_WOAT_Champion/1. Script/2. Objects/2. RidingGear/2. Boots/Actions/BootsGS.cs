@@ -110,7 +110,7 @@ namespace WOAT
             // 현재 프레임에서 실제로 가장 가까운 객체를 찾기 위해, 매번 초기화
             foreach (LayerMask mask in layerMasks)
             {
-                Collider[] hitColliders = Physics.OverlapSphere(boots.transform.position,
+                Collider[] hitColliders = Physics.OverlapSphere(player.transform.position,
                                                                 detectRadius,
                                                                 mask);
 

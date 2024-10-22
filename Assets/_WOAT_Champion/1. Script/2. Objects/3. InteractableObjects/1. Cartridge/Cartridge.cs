@@ -6,6 +6,7 @@ namespace WOAT
     public class Cartridge : MonoBehaviour, IInteractable, IUsable
     {
         // 기본 정보
+        private readonly int itemID = 0;
         private ItemKey itemData;
         public ItemDatabase itemDatabase;
 
@@ -17,6 +18,9 @@ namespace WOAT
 
         // 불리언 변수
         private bool isUsed = false;        // 카트리지 사용 여부를 확인하는 불리언
+
+        // 클래스 컴포넌트
+        private Player player;
         #endregion
 
         // 속성
@@ -30,7 +34,7 @@ namespace WOAT
         private void Start()
         {
             // 최초에 아이템 데이터베이스로부터 자신을 정의
-            itemData = itemDatabase.itemList[0];
+            itemData = itemDatabase.itemList[itemID];
 
             // 초기화
             currentPropellant = maxPropellant;
@@ -41,8 +45,6 @@ namespace WOAT
         #region Methods
         public void UseCartridge(float propellant)
         {
-            if (!isUsed) isUsed = true;
-
             if (currentPropellant < propellant)
             {
                 Debug.Log("추진제가 다 떨어졌어. 새 카트리지로 교체해야 해.");
@@ -66,42 +68,28 @@ namespace WOAT
             return itemData;
         }
 
-        public void UseItem(Player player)
+        public bool CanUse(Player player)
         {
-            return;
-        }
-        #endregion
-    }
-}
+            this.player = player;
 
-/*
-
-
-        // 사용할 아이템이 카트리지라면
-        private bool IfCartridge(IUsable usableItem)
-        {
-            if (player.playerStates.isBoard == false)
-            {
-                RidingBoots boots = (RidingBoots)player.ridingGear;
-                GameObject newCartridge = TakeOutItem(0);
-                boots.ChangeCartridge(newCartridge);
-
-                Debug.Log($"{player.ridingGear.name}에 카트리지를 장착했어.");
-                return true;
-            }
-
+            if (player.playerStates.isBoard == false) return true;
             else
             {
-                Debug.Log("카트리지는 부츠 타입 라이딩기어에 탑승 중일 때에만 사용할 수 있어.");
+                Debug.Log("카트리지는 부츠 타입 라이딩기어를 착용한 상태에서만 쓸 수 있어.");
                 return false;
             }
         }
 
-        private GameObject TakeOutItem(int itemID)
+        public void UseItem()
         {
-            ItemKey thisItem = CollectionUtility.FirstOrDefault<ItemKey>(itemDatabase.itemList, key => key.itemID == itemDatabase.itemList[itemID].itemID);
+            RidingBoots boots = (RidingBoots)player.ridingGear;
+            GameObject newCartridge = itemDatabase.itemList[itemID].itemPrefabAddOn;
+            boots.bootsCombine.ChangeCartridge(newCartridge);
 
-            if (thisItem.itemPrefabAddOn != null) return thisItem.itemPrefabAddOn;
-            else return thisItem.itemPrefab;
+            Debug.Log($"{player.ridingGear.name}에 카트리지를 장착했어.");
+
+            if (!isUsed) isUsed = true;
         }
- */
+        #endregion
+    }
+}

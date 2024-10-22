@@ -26,10 +26,6 @@ namespace WOAT
         public BootsCombine(RidingBoots boots) { this.boots = boots; }
         #endregion
 
-        // 이벤트 핸들러
-        #region Event Handlers
-        #endregion
-
         // 메서드
         #region Methods
         // 실제로 이벤트 핸들러에 작성하는 메서드

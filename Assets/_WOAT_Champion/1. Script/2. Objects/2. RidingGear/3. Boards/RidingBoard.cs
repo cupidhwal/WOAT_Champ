@@ -153,8 +153,8 @@ namespace WOAT
             joint.anchor = new Vector3(0, -2, 0);           // 조인트 주체 위치
             joint.connectedAnchor = new Vector3(0, 1, 0);   // 조인트 표적 위치
 
-            joint.breakForce = 40000f;                      // 조인트 파괴 강도를 무한대로 설정
-            joint.breakTorque = 10000f;                     // 조인트 파괴 회전력을 무한대로 설정
+            joint.breakForce = 100000f;                     // 조인트 파괴 강도를 무한대로 설정
+            joint.breakTorque = 100000f;                    // 조인트 파괴 회전력을 무한대로 설정
         }
 
         protected override void RideOff()

@@ -181,7 +181,7 @@ namespace WOAT
         // 배열을 Transform 리스트로 변환하는 유틸리티 메서드
         private static List<Transform> ArrayToTransformList(GameObject[] array)
         {
-            List<Transform> transformList = new List<Transform>();
+            List<Transform> transformList = new();
             foreach (GameObject obj in array)
             {
                 transformList.Add(obj.transform);

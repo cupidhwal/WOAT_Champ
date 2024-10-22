@@ -58,11 +58,14 @@ namespace WOAT
             // 해당 아이템이 사용 가능한지 여부를 확인한 뒤
             if (thisItem.itemPrefab.TryGetComponent<IUsable>(out var usableItem))
             {
-                // 아이템을 사용
-                usableItem.UseItem(player);
+                if (usableItem.CanUse(player))
+                {
+                    // 아이템을 사용
+                    usableItem.UseItem();
 
-                // 수량 갱신
-                inventoryManager.CountItem(pair.Key, pair.Value.itemIndex);
+                    // 수량 갱신
+                    inventoryManager.CountItem(pair.Key, pair.Value.itemIndex);
+                }
             }
 
             // 사용할 수 없는 아이템이라면 메서드 종료
