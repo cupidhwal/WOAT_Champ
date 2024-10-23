@@ -50,17 +50,13 @@ namespace WOAT
             // 마우스 커서 잠금
             Cursor.lockState = CursorLockMode.Locked;
 
-            // 마우스 커서 포지션 컨트롤 입력은 기본적으로 비활성화
+            // 기본적으로 비활성화하는 컨트롤
+            control.Player.RideOn.Disable();
+            control.Player.CursorClick.Disable();
             control.Player.CursorPosition.Disable();
 
-            // 라이딩기어 탑승 입력은 기본적으로 비활성화
-            control.Player.RideOn.Disable();
-
-            // 상호작용 클릭은 기본적으로 비활성화
-            control.Player.CursorClick.Disable();
-
             // 상호작용 키 입력은 일단 꺼둔다
-            control.UI.Disable();
+            //control.UI.Disable();
         }
 
         private void FixedUpdate()
@@ -133,20 +129,28 @@ namespace WOAT
             control.Player.KeepGoing.performed += OnKeepGoingPerformed;
             control.Player.KeepGoing.canceled += OnKeepGoingCanceled;
 
+            // 실행취소 이벤트 핸들러 구독
+            control.UI.Cancel.started += playerUse.OnCancelStarted;
+
             // 대리자 이벤트에 메서드 구독
             OnKeepGoing += FlagCheck;
 
-            // 플레이어 컨트롤 활성화
+            // 컨트롤 활성화
             control.Player.Enable();
+            control.UI.Enable();
         }
 
         private void OnDisable()
         {
-            // 플레이어 컨트롤 비활성화
+            // 컨트롤 비활성화
+            control.UI.Disable();
             control.Player.Disable();
 
             // 대리자 이벤트에 메서드 구독 해제
             OnKeepGoing -= FlagCheck;
+
+            // 실행취소 이벤트 핸들러 구독 해제
+            control.UI.Cancel.started -= playerUse.OnCancelStarted;
 
             // KeepGoing 이벤트 핸들러 구독 해제
             control.Player.KeepGoing.performed -= OnKeepGoingPerformed;

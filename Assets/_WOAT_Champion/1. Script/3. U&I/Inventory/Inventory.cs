@@ -10,18 +10,15 @@ namespace WOAT
     {
         // 필드
         #region Variables
-        private const float alphaValue = 0.9f;      // 인벤토리에 담긴 아이템의 알파값
-        
-        // 인벤토리 상태 필드
-        public Dictionary<ItemKey, ItemValue> invenDict = new();
-
         // 클래스 컴포넌트
         private InventoryManager inventoryManager;
 
         // 인벤토리 요소
+        private const float alphaValue = 0.9f;      // 인벤토리에 담긴 아이템의 알파값
         private GameObject invenPanel;
         public GameObject thinkItem;                // 프리팹
         public List<GameObject> thinkItems = new(); // 새로운 인벤토리 시스템을 위한 리스트
+        public Dictionary<ItemKey, ItemValue> invenDict = new();
         #endregion
 
         // 라이프 사이클
@@ -112,8 +109,28 @@ namespace WOAT
             }
         }
 
+        /*// 각 버튼의 번호에 맞는 인덱스를 자동으로 할당하는 메서드
+        private void AssignInvenSlots()
+        {
+            foreach (var pair in invenDict)
+            {
+                int index = pair.Value.itemIndex;  // 이 변수를 반드시 따로 선언해줘야 람다 함수 안에서 올바르게 작동
+
+                thinkItems[index].GetComponent<Button>().onClick.RemoveAllListeners();
+                thinkItems[index].GetComponent<Button>().onClick.AddListener(() => SelectInvenSlot(pair));
+            }
+        }
+
+        // 인벤슬롯을 선택하는 메서드
+        private void SelectInvenSlot(KeyValuePair<ItemKey, ItemValue> pair)
+        {
+            // 해당 슬롯이 빈 상태라면 return
+            if (!invenDict.ContainsKey(pair.Key)) return;
+            inventoryManager.UseInven(pair);
+        }*/
+
         // 인벤토리를 업데이트하는 메서드
-        public void UpdateSlot(ItemKey itemKey, int slotIndex)
+        private void UpdateSlot(ItemKey itemKey, int slotIndex)
         {
             // 퀵슬롯 리스트의 해당 인덱스에 아이콘 업데이트
             Image image = thinkItems[slotIndex].GetComponent<Image>();

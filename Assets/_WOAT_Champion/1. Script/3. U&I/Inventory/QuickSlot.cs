@@ -55,10 +55,10 @@ namespace WOAT
         }
 
         // 퀵슬롯을 선택하는 메서드
-        private void SelectQuickSlot(KeyValuePair<ItemKey, ItemValue> pair, int quickIndex)
+        private void SelectQuickSlot(KeyValuePair<ItemKey, ItemValue> pair)
         {
             // 해당 슬롯이 빈 상태라면 return
-            if (!quickDict.ContainsValue(quickIndex)) return;
+            if (!quickDict.ContainsKey(pair)) return;
             inventoryManager.UseQuick(pair);
         }
 
@@ -151,7 +151,7 @@ namespace WOAT
                 int index = pair.Value;  // 이 변수를 반드시 따로 선언해줘야 람다 함수 안에서 올바르게 작동
 
                 quickSlots[index].onClick.RemoveAllListeners();
-                quickSlots[index].onClick.AddListener(() => SelectQuickSlot(pair.Key, index));
+                quickSlots[index].onClick.AddListener(() => SelectQuickSlot(pair.Key));
             }
         }
 

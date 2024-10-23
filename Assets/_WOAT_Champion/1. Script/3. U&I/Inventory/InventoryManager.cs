@@ -79,6 +79,12 @@ namespace WOAT
             this.playerUse = playerUse;
         }
 
+        /*public void UseInven(KeyValuePair<ItemKey, ItemValue> pair)
+        {
+            Debug.Log("호출");
+            playerUse.UseItem(pair);
+        }*/
+
         public void UseQuick(KeyValuePair<ItemKey, ItemValue> pair)
         {
             playerUse.UseItem(pair);
@@ -193,8 +199,8 @@ namespace WOAT
             // 먼저 허상 아이템을 제거한 뒤
             Destroy(itemPhantom);
 
-            // 퀵슬롯으로 옮기거나 퀵슬롯에서 빼는 경우 중단
-            if (thisSlot != null || isQuick == true)
+            // 다른 슬롯에 두었다면 종료
+            if (thisSlot != null || isQuick)
             {
                 isQuick = false;
                 QuickItem(selectedItemKey);
@@ -215,7 +221,8 @@ namespace WOAT
         public void CountItem(ItemKey selectedItemKey, int invenIndex)
         {
             // 아이템의 수량을 감소시킨다
-            inventory.invenDict[selectedItemKey].Count(-1);
+            if (inventory.invenDict.ContainsKey(selectedItemKey))
+                inventory.invenDict[selectedItemKey].Count(-1);
 
             // 퀵슬롯으로 정보 넘기기
             InvenToQuick(ItemData(selectedItemKey));
@@ -245,6 +252,24 @@ namespace WOAT
         }
 
         #region SelectSlot
+        // 어떤 슬롯에 드래그 아이템을 두었는지 확인하는 메서드
+        private bool WhereSelect(ItemKey selectedItemKey)
+        {
+            if (CollectionUtility.FirstOrNull(inventory.thinkItems,
+                obj => inventory.thinkItems.Contains(obj)).TryGetComponent<Button>(out var thisButton) == thisSlot)
+            {
+                if (selectedItemKey.itemPrefab.TryGetComponent<IUsable>(out var usableItem)) return true;
+                else return false;
+            }
+
+            else
+            {
+                isQuick = false;
+                QuickItem(selectedItemKey);
+                return true;
+            }
+        }
+
         // 어떤 슬롯을 선택했는지 확인하는 메서드
         private void WhichSelect()
         {
@@ -348,7 +373,7 @@ namespace WOAT
                 yield return null;
             }
 
-            // 플레이어가 적절한 위치를 클릭하면 해당 아이템을 실체화
+            // 플레이어가 적절한 위치에서 드래그를 해제하면 해당 아이템을 실체화
             DropItem(selectedItemKey, slotIndex);
 
             // 이 반복기를 기억하는 변수를 비우고
@@ -393,7 +418,7 @@ namespace WOAT
                 yield return null;
             }
 
-            // 인벤토리에서 제자리에 돌려놓는 건 안 돼
+            // 이제 인벤토리에서 제자리 버튼이라면 아이템을 사용하도록 바꾼다
             foreach (GameObject obj in inventory.thinkItems)
             {
                 if (thisSlot == null) break;

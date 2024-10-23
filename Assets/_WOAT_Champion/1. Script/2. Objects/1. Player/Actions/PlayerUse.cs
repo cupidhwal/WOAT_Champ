@@ -38,6 +38,7 @@ namespace WOAT
 
         // 이벤트 핸들러
         #region Event Handlers
+        public void OnCancelStarted(InputAction.CallbackContext _) => inventoryManager.ShowItem(inventoryManager.IsOpenInventory = false);
         public void OnInventoryStarted(InputAction.CallbackContext _) => inventoryManager.ShowItem(inventoryManager.IsOpenInventory = !inventoryManager.IsOpenInventory);
         public void OnQuickSlot1DownStarted(InputAction.CallbackContext _) => quickSlots[0].onClick.Invoke();
         public void OnQuickSlot2DownStarted(InputAction.CallbackContext _) => quickSlots[1].onClick.Invoke();
